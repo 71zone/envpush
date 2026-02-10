@@ -6,12 +6,5 @@
   "linked": [],
   "access": "public",
   "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": [
-    "@envpush/shared",
-    "@envpush/db-pglite",
-    "@envpush/client",
-    "@envpush/server",
-    "@envpush/tsconfig"
-  ]
+  "updateInternalDependencies": "patch"
 }
