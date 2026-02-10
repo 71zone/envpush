@@ -1,0 +1,31 @@
+{
+  "name": "envpush",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "dev:server": "turbo dev --filter=@envpush/server",
+    "dev:cli": "turbo dev --filter=envpush",
+    "db:generate": "turbo db:generate --filter=@envpush/db-pglite",
+    "db:push": "turbo db:push --filter=@envpush/db-pglite",
+    "db:studio": "turbo db:studio --filter=@envpush/db-pglite",
+    "prepare": "husky",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "husky": "^9.1.7",
+    "turbo": "^2.4.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "@electric-sql/pglite"
+    ]
+  }
+}

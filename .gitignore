@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.evp.json
+data/
+.turbo/
+*.tsbuildinfo

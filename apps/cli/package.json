@@ -1,0 +1,34 @@
+{
+  "name": "envpush",
+  "version": "0.1.0",
+  "description": "Push and pull environment variables securely across your team",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "evp": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/71zone/envpush.git",
+    "directory": "apps/cli"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.0",
+    "chalk": "^5.4.0",
+    "citty": "^0.1.6",
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@envpush/client": "workspace:*",
+    "@envpush/shared": "workspace:*",
+    "@envpush/tsconfig": "workspace:*",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.7.0"
+  }
+}
