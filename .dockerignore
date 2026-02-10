@@ -1,0 +1,7 @@
+node_modules
+.git
+.turbo
+data
+*.tsbuildinfo
+.env
+.evp.json
