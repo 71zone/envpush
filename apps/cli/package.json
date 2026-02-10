@@ -1,13 +1,15 @@
 {
   "name": "envpush",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Push and pull environment variables securely across your team",
   "license": "MIT",
   "type": "module",
   "bin": {
     "evp": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/71zone/envpush.git",
