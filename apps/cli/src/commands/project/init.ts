@@ -60,20 +60,16 @@ export default defineCommand({
       handleCancel(projectName);
 
       // Map branch to environment
-      const envOptions = [
-        { value: "development", label: "development" },
-        { value: "staging", label: "staging" },
-        { value: "production", label: "production" },
-      ];
       const suggestedEnv = info.suggestedEnv || "development";
 
-      const selectedEnv = await p.select({
-        message: `Map current branch "${info.branch || "unknown"}" to environment:`,
-        options: envOptions,
+      const envName = await p.text({
+        message: `Environment name for branch "${info.branch || "unknown"}"`,
         initialValue: suggestedEnv,
+        validate: (v) => {
+          if (!v || v.trim().length === 0) return "Environment name is required";
+        },
       });
-      handleCancel(selectedEnv);
-      const envName = selectedEnv as string;
+      handleCancel(envName);
 
       // Create project
       const s = p.spinner();
@@ -89,11 +85,22 @@ export default defineCommand({
       };
       s.stop("Project created!");
 
-      // Find the selected environment
-      const targetEnv = projectData.environments.find((e) => e.slug === envName);
+      // Find or create the selected environment
+      let targetEnv = projectData.environments.find(
+        (e) => e.slug === envName || e.name.toLowerCase() === envName.toLowerCase()
+      );
       if (!targetEnv) {
-        p.cancel(`Environment "${envName}" not found.`);
-        process.exit(1);
+        s.start(`Creating environment "${envName}"...`);
+        const envRes = await client.environments[":projectId"].environments.$post({
+          param: { projectId: projectData.project.id },
+          json: { name: envName },
+        });
+        await handleApiResponse(envRes);
+        const envData = await envRes.json() as {
+          environment: { id: string; name: string; slug: string };
+        };
+        targetEnv = envData.environment;
+        s.stop(`Created environment "${targetEnv.name}"`);
       }
 
       // Import .env if exists
@@ -123,7 +130,7 @@ export default defineCommand({
       await saveProjectConfig({
         team: teamSlug,
         project: projectData.project.slug,
-        environment: envName,
+        environment: targetEnv.slug,
       });
       p.log.success("Created .evp.json");
 
@@ -133,7 +140,7 @@ export default defineCommand({
       p.note(
         [
           `Project:     ${projectName}`,
-          `Environment: ${envName}`,
+          `Environment: ${targetEnv.name}`,
           info.envVarCount ? `Secrets:     ${info.envVarCount} synced` : "",
         ]
           .filter(Boolean)
