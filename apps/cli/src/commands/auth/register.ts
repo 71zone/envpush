@@ -1,7 +1,7 @@
 import { defineCommand } from "citty";
 import { createClient } from "@envpush/client";
 import { p, handleCancel, chalk } from "../../lib/ui.js";
-import { saveConfig } from "../../lib/config.js";
+import { loadConfig, saveConfig } from "../../lib/config.js";
 import { handleApiResponse, handleError } from "../../lib/errors.js";
 
 export default defineCommand({
@@ -10,12 +10,21 @@ export default defineCommand({
     try {
       p.intro(chalk.bold("evp register"));
 
-      const serverUrl = await p.text({
-        message: "Server URL",
-        placeholder: "http://localhost:8787",
-        defaultValue: "http://localhost:8787",
-      });
-      handleCancel(serverUrl);
+      const config = await loadConfig();
+      let serverUrl: string;
+
+      if (config?.server_url) {
+        serverUrl = config.server_url;
+        p.log.info(`Server: ${chalk.bold(serverUrl)}`);
+      } else {
+        const input = await p.text({
+          message: "Server URL",
+          placeholder: "http://localhost:8787",
+          defaultValue: "http://localhost:8787",
+        });
+        handleCancel(input);
+        serverUrl = input;
+      }
 
       const name = await p.text({
         message: "Name",
@@ -41,7 +50,12 @@ export default defineCommand({
       });
       handleCancel(password);
 
-      const confirmPassword = await p.password({ message: "Confirm password" });
+      const confirmPassword = await p.password({
+        message: "Confirm password",
+        validate: (v) => {
+          if (!v || v.length === 0) return "Please confirm your password";
+        },
+      });
       handleCancel(confirmPassword);
 
       if (password !== confirmPassword) {
@@ -77,7 +91,12 @@ export default defineCommand({
       handleCancel(createTeam);
 
       if (createTeam) {
-        const teamName = await p.text({ message: "Team name" });
+        const teamName = await p.text({
+          message: "Team name",
+          validate: (v) => {
+            if (!v || v.trim().length === 0) return "Team name is required";
+          },
+        });
         handleCancel(teamName);
 
         s.start("Creating team...");
