@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source="https://github.com/71zone/envpush"
 
 WORKDIR /app
 
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml turbo.json ./
 COPY packages/tsconfig/ packages/tsconfig/
 COPY packages/shared/ packages/shared/
 COPY packages/db-pglite/ packages/db-pglite/
