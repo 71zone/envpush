@@ -36,7 +36,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
-        if: steps.changesets.outputs.hasChangesets == 'false' && steps.changesets.outputs.published != 'true' && startsWith(github.event.head_commit.message, 'chore: version packages')
+        if: >-
+          steps.changesets.outputs.hasChangesets == 'false' &&
+          steps.changesets.outputs.published != 'true' &&
+          startsWith(github.event.head_commit.message, 'chore: version packages')
         run: |
           VERSION=$(node -p "require('./apps/cli/package.json').version")
           TAG="v${VERSION}"
