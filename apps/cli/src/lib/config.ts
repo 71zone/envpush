@@ -4,8 +4,8 @@ import { homedir } from "node:os";
 import { CONFIG_DIR, CONFIG_FILE } from "@envpush/shared";
 
 export interface CLIConfig {
-  server_url: string;
-  token: string;
+  server_url?: string;
+  token?: string;
 }
 
 function configDir(): string {
@@ -28,6 +28,11 @@ export async function loadConfig(): Promise<CLIConfig | null> {
 export async function saveConfig(config: CLIConfig): Promise<void> {
   await mkdir(configDir(), { recursive: true });
   await writeFile(configPath(), JSON.stringify(config, null, 2) + "\n", { mode: 0o600 });
+}
+
+export async function saveServerUrl(url: string): Promise<void> {
+  const existing = await loadConfig();
+  await saveConfig({ ...existing, server_url: url });
 }
 
 export async function clearConfig(): Promise<void> {
