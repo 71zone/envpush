@@ -1,5 +1,11 @@
 # envpush
 
+## 0.2.1
+
+### Patch Changes
+
+- Fix CLI version display to read from package.json at build time instead of hardcoded string
+
 ## 0.2.0
 
 ### Minor Changes
