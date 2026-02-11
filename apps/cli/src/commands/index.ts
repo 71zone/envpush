@@ -3,6 +3,8 @@ import { p, handleCancel, chalk } from "../lib/ui.js";
 import { loadConfig } from "../lib/config.js";
 import { loadProjectConfig } from "../lib/project-config.js";
 
+declare const __VERSION__: string;
+
 const commands = {
   // Secrets
   pull: () => import("./secrets/pull.js").then((m) => m.default),
@@ -111,7 +113,7 @@ function buildCategories(loggedIn: boolean, hasProject: boolean): Category[] {
 export const main = defineCommand({
   meta: {
     name: "evp",
-    version: "0.1.0",
+    version: __VERSION__,
     description: "Self-hosted environment variable manager",
   },
   subCommands: {
@@ -132,7 +134,7 @@ export const main = defineCommand({
     diff: commands.diff,
   },
   async run() {
-    p.intro(chalk.bold("evp") + chalk.dim(" v0.1.0"));
+    p.intro(chalk.bold("evp") + chalk.dim(` v${__VERSION__}`));
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
