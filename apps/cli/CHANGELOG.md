@@ -1,5 +1,11 @@
 # envpush
 
+## 0.2.2
+
+### Patch Changes
+
+- Update README with interactive demo GIF and concise documentation
+
 ## 0.2.1
 
 ### Patch Changes
